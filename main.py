@@ -22,7 +22,7 @@ print(f"Using device: {DEVICE}")
 print(f"Dataset: {DATA_PATH}")
 
 # ============================================================
-# STEP 1: WORD CLASSIFICATION DATASET
+# WORD CLASSIFICATION DATASET
 # ============================================================
 
 class WordClassificationDataset(Dataset):
@@ -51,7 +51,7 @@ class WordClassificationDataset(Dataset):
         return torch.FloatTensor(self.X[idx]), self.y[idx]
 
 # ============================================================
-# STEP 2: MODEL ARCHITECTURES
+# MODEL ARCHITECTURES
 # ============================================================
 
 class CNNEncoder(nn.Module):
@@ -185,7 +185,7 @@ class CNNGRUConformer(nn.Module):
         return self.classifier(features), features
 
 # ============================================================
-# STEP 3: TRAINING FUNCTION WITH TQDM
+# TRAINING FUNCTION
 # ============================================================
 
 def train_model(model, train_loader, val_loader, model_name, num_epochs):
@@ -338,7 +338,7 @@ def train_model(model, train_loader, val_loader, model_name, num_epochs):
     return history, best_val_top10
 
 # ============================================================
-# STEP 4: MAIN EXECUTION
+# MAIN EXECUTION
 # ============================================================
 
 def main():
@@ -392,7 +392,7 @@ def main():
         train_dataset, 
         batch_size=BATCH_SIZE, 
         shuffle=True,
-        num_workers=0,  # Set to 0 for Windows
+        num_workers=0, 
         pin_memory=True if DEVICE == 'cuda' else False
     )
     
@@ -400,7 +400,7 @@ def main():
         val_dataset, 
         batch_size=BATCH_SIZE, 
         shuffle=False,
-        num_workers=0,  # Set to 0 for Windows
+        num_workers=0, 
         pin_memory=True if DEVICE == 'cuda' else False
     )
     
@@ -506,19 +506,15 @@ def main():
     
     best_model = max(results.items(), key=lambda x: x[1]['best_top10'])
     print("\n" + "="*70)
-    print(f"🏆 WINNER: {best_model[0]}")
+    print(f"WINNER: {best_model[0]}")
     print(f"   Top-10 Accuracy: {best_model[1]['best_top10']:.2f}%")
     
     if best_model[1]['best_top10'] > 31.04:
         improvement = best_model[1]['best_top10'] - 31.04
-        print(f"   🎉 BEATS BELT by {improvement:.2f}%!")
+        print(f"Baseline comparision {improvement:.2f}%!")
     
     print("="*70)
-    
-    if 'GRU' in best_model[0]:
-        print("\n🎉 SUCCESS! GRU-based model wins!")
-        print("✅ Explicit temporal modeling is validated!")
-        print("✅ Your innovation (CNN+GRU) outperforms BELT baseline!")
+
 
 if __name__ == "__main__":
     main()
